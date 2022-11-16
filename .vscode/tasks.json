@@ -1,0 +1,57 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "clean",
+        "args": ["clean"],
+        "command": "cargo",
+        "presentation": {
+            "reveal": "always"
+        }
+    }, {
+        "label": "cargo-offline",
+        "args": [
+            "run",
+            "-v",
+            "--offline",
+            "--no-default-features",
+            "${input:cargo-metadata-config}",
+            "--bin",
+            "cargo-offline",
+            "--",
+            "offline",
+            "check"
+        ],
+        "command": "cargo",
+        "presentation": {
+            "reveal": "always"
+        },
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "problemMatcher": [{
+            "owner": "rust",
+            "fileLocation": ["relative", "${workspaceRoot}"],
+            "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(\\d+):(\\d+)\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "endLine": 4,
+                "endColumn": 5,
+                "severity": 6,
+                "message": 7
+            }
+        }]
+    }],
+    "inputs": [{
+        "type": "pickString",
+        "id": "cargo-metadata-config",
+        "description": "ambassador where?",
+        "options": [
+            "--features=cargo-metadata",
+            "--features=toml-config"
+        ],
+        "default": "--features=ambassador-where"
+    }]
+}
