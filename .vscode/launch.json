@@ -13,16 +13,24 @@
         "cargo": {
             "args": [
                 "build",
-                // "--offline",
-                "--no-default-features",
-                "${input:cargo-metadata-config}",
-                "--bin",
-                "cargo-offline"
+                "--offline",
+                "${input:cargo-metadata-config}"
             ]
         },
         "args": [
             "offline",
-            "check"
+            "check",
+            "${input:cargo-metadata-config}"
         ]
+    }],
+    "inputs": [{
+        "type": "pickString",
+        "id": "cargo-metadata-config",
+        "description": "运行时 features",
+        "options": [
+            "--features=cargo-metadata",
+            "--features=toml-config"
+        ],
+        "default": "--features=cargo-metadata"
     }]
 }

@@ -1,7 +1,14 @@
 [package]
-name = "cargo-offline"
-version = "0.1.0"
-edition = "2021"
+name = 'cargo-offline'
+edition = '2021'
+version = '0.1.0'
+authors = ['Stuart Zhang <stuartpage@qq.com>']
+description = '`cargo-offline`是标准`cargo`命令的包装器。其被用来，根据距离`cargo-offline`命令执行目录最近的`Cargo.toml`文件是否曾经被修改，来给被包装的`cargo`命令聪明地添加`--offline`命令行参数（即，离线编译）。'
+repository = 'https://github.com/stuartZhang/cargo-offline'
+license = "Apache-2.0"
+keywords = ['cargo', 'offline']
+categories = ['command-line-utilities', 'development-tools::cargo-plugins']
+exclude = ['.vscode', '.gitignore']
 
 [dependencies]
 derive_builder = '0.11.2'
@@ -17,10 +24,6 @@ version = '0.5.8'
 features = ['preserve_order']
 
 [features]
-ambassador-where = []
 cargo-metadata = ['cargo_toml']
-default = [
-    'ambassador-where',
-    'cargo-metadata',
-]
+default = []
 toml-config = []

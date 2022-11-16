@@ -1,7 +1,17 @@
 {
-    "rust-analyzer.checkOnSave.overrideCommand": [
+    "rust-analyzer.checkOnSave.features": [
+        "cargo-metadata"
+    ],
+    "rust-analyzer.checkOnSave.extraArgs": [
+        "--offline"
+    ],
+    "rust-analyzer.cargo.features": [
+        "cargo-metadata"
+    ],
+    "rust-analyzer.cargo.buildScripts.overrideCommand": [
         "cargo",
         "check",
+        "--quiet",
         "--workspace",
         "--message-format=json",
         "--all-targets",

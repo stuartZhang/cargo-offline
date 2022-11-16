@@ -13,10 +13,7 @@
             "run",
             "-v",
             "--offline",
-            "--no-default-features",
             "${input:cargo-metadata-config}",
-            "--bin",
-            "cargo-offline",
             "--",
             "offline",
             "check"
@@ -47,11 +44,11 @@
     "inputs": [{
         "type": "pickString",
         "id": "cargo-metadata-config",
-        "description": "ambassador where?",
+        "description": "编译时 features",
         "options": [
             "--features=cargo-metadata",
             "--features=toml-config"
         ],
-        "default": "--features=ambassador-where"
+        "default": "--features=cargo-metadata"
     }]
 }
