@@ -16,7 +16,8 @@
             "${input:cargo-metadata-config}",
             "--",
             "offline",
-            "check"
+            "check",
+            "${input:cargo-metadata-config}",
         ],
         "command": "cargo",
         "presentation": {
