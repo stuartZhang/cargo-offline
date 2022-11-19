@@ -23,9 +23,9 @@
     }, {
         "label": "cargo-offline",
         "args": [
+            "offline",
             "run",
             "-v",
-            "--offline",
             "${input:cargo-metadata-config}",
             "--",
             "offline",

@@ -12,8 +12,8 @@
         "sourceLanguages": ["rust"],
         "cargo": {
             "args": [
+                "offline",
                 "build",
-                "--offline",
                 "${input:cargo-metadata-config}"
             ]
         },
