@@ -37,9 +37,11 @@ fn ioc_container<'a, T>(action: Option<T>) -> Result<(), Box<dyn Error>> where T
             args.push("--offline".to_string());
         }
     }
+    #[cfg(debug_assertions)]
     dbg!(&cargo_bin, &args);
     let mut child = Command::new(cargo_bin).args(args).spawn()?;
     let exit_code = child.wait()?;
+    #[cfg(debug_assertions)]
     dbg!(exit_code);
     Ok(())
 }
