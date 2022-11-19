@@ -87,13 +87,13 @@ Caused by:
 * 选择缓存`Cargo.toml`文件【修改时间】至`Cargo.toml [metadata]`的同学，执行这条安装指令：
 
     ```shell
-    cargo install --features=cargo-metadata
+    cargo install cargo-offline --features=cargo-metadata
     ```
 
 * 选择缓存`Cargo.toml`文件【修改时间】至`cargo-offline-config.toml`独立文件的同学，执行这条安装指令：
 
     ```shell
-    cargo install --features=toml-config
+    cargo install cargo-offline --features=toml-config
     ```
 
 因为我没有给`Cargo Package`设置`default features`，所以完全忽略`--features=`命令行参数会导致源码编译错误。恶作剧地，同时指定`--features=cargo-metadata`与`--features=toml-config`也会导致编译失败。
