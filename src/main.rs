@@ -28,11 +28,9 @@ fn ioc_container<'a, T>(action: Option<T>) -> Result<(), Box<dyn Error>> where T
             manifest_file.metadata()?.modified()?.duration_since(SystemTime::UNIX_EPOCH)?.as_secs()
         };
         let cached_last_modified_time = action.get_cached_last_modified_time()?;
-        let is_write = if let Some(cached_last_modified_time) = cached_last_modified_time {
+        let is_write = cached_last_modified_time.map_or(true, |cached_last_modified_time| {
             cached_last_modified_time < last_modified_time
-        } else {
-            true
-        };
+        });
         if is_write {
             action.put_last_modified_time(last_modified_time)?;
         } else if !args.contains(&"--offline".to_string()) {
