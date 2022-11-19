@@ -2,11 +2,24 @@
     "version": "2.0.0",
     "tasks": [{
         "label": "clean",
-        "args": ["clean"],
         "command": "cargo",
+        "args": ["clean"],
         "presentation": {
             "reveal": "always"
-        }
+        },
+        "problemMatcher": []
+    }, {
+        "label": "publish",
+        "command": "cargo",
+        "args": [
+            "publish",
+            "--no-verify",
+            "--allow-dirty"
+        ],
+        "presentation": {
+            "reveal": "always"
+        },
+        "problemMatcher": []
     }, {
         "label": "cargo-offline",
         "args": [
