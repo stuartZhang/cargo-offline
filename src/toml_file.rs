@@ -22,9 +22,12 @@ impl<'a> TAction<'a> for Action<'a> {
     fn get_cached_last_modified_time(&mut self) -> MxResult<Option<u64>> {
         let cache_file_path = self.get_cache_file_path();
         if cache_file_path.is_file() {
-            let mut cache_file_str = String::new();
-            let mut cache_file = File::open(&cache_file_path)?;
-            cache_file.read_to_string(&mut cache_file_str)?;
+            let cache_file_str = {
+                let mut cache_file_str = String::new();
+                let mut cache_file = File::open(&cache_file_path)?;
+                cache_file.read_to_string(&mut cache_file_str)?;
+                cache_file_str
+            };
             self.config = Some(toml::from_slice(cache_file_str.as_bytes())?);
             return Ok(self.config.as_mut().and_then(|config| {
                 config.as_table()
