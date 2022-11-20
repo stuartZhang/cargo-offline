@@ -23,9 +23,7 @@ fn ioc_container<'a, T>(action: Option<T>) -> MxResult<()> where T: TAction<'a> 
         Some(arg1st) if arg1st == "offline" => env::args().skip(2).collect(),
         _ => env::args().skip(1).collect()
     };
-    let cargo_bin = env::var("CARGO").or_else(|_| -> Result<String, VarError> {
-        Ok("cargo".to_string())
-    })?;
+    let cargo_bin = env::var("CARGO").or::<VarError>(Ok("cargo".to_string()))?;
     if let Some(mut action) = action {
         let last_modified_time = {
             let manifest_file = File::open(action.get_manifest_path())?;
