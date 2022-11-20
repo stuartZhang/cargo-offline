@@ -1,6 +1,6 @@
-use crate::TAction;
+use crate::{MxResult, TAction};
 use ::derive_builder::Builder;
-use ::std::{collections::HashMap, error::Error, io::Write, fs::File, io::Read, path::{Path, PathBuf}};
+use ::std::{collections::HashMap, io::Write, fs::File, io::Read, path::{Path, PathBuf}};
 use ::toml::{map::Map, Value};
 #[derive(Builder)]
 pub struct Action<'a> {
@@ -19,7 +19,7 @@ impl<'a> TAction<'a> for Action<'a> {
     fn get_manifest_path(&self) -> &'a Path {
         self.manifest_path
     }
-    fn get_cached_last_modified_time(&mut self) -> Result<Option<u64>, Box<dyn Error>> {
+    fn get_cached_last_modified_time(&mut self) -> MxResult<Option<u64>> {
         let cache_file_path = self.get_cache_file_path();
         if cache_file_path.is_file() {
             let mut cache_file_str = String::new();
@@ -38,7 +38,7 @@ impl<'a> TAction<'a> for Action<'a> {
         }
         Ok(None)
     }
-    fn put_last_modified_time(&mut self, last_modified_time: u64) -> Result<(), Box<dyn Error>> {
+    fn put_last_modified_time(&mut self, last_modified_time: u64) -> MxResult<()> {
         let cache_file_path = self.get_cache_file_path();
         if self.config.is_none() {
             self.config.replace(Value::Table(Map::new()));

@@ -6,15 +6,16 @@ mod cargo_metadata;
 mod toml_file;
 /// 程序内启用了【`Builder`设计模式】与【`Strategy`设计模式】
 use ::std::{error::Error, iter::Iterator, env::{VarError, self}, fs::File, path::Path, process::Command, time::SystemTime};
+type MxResult<T> = Result<T, Box<dyn Error>>;
 /// 【`Strategy`设计模式】的【依赖注入】规格定义
 trait TAction<'a> {
     const KEY: &'a str = "last-modified-system-time";
     fn get_manifest_path(&self) -> &'a Path;
-    fn get_cached_last_modified_time(&mut self) -> Result<Option<u64>, Box<dyn Error>>;
-    fn put_last_modified_time(&mut self, last_modified_time: u64) -> Result<(), Box<dyn Error>>;
+    fn get_cached_last_modified_time(&mut self) -> MxResult<Option<u64>>;
+    fn put_last_modified_time(&mut self, last_modified_time: u64) -> MxResult<()>;
 }
 /// 【`Strategy`设计模式】的`IoC`容器
-fn ioc_container<'a, T>(action: Option<T>) -> Result<(), Box<dyn Error>> where T: TAction<'a> {
+fn ioc_container<'a, T>(action: Option<T>) -> MxResult<()> where T: TAction<'a> {
     let mut args: Vec<String> = match env::args().nth(1) {
         Some(arg1st) if arg1st == "offline" => env::args().skip(2).collect(),
         _ => env::args().skip(1).collect()
@@ -33,8 +34,11 @@ fn ioc_container<'a, T>(action: Option<T>) -> Result<(), Box<dyn Error>> where T
         });
         if is_write {
             action.put_last_modified_time(last_modified_time)?;
-        } else if !args.contains(&"--offline".to_string()) {
-            args.push("--offline".to_string());
+        } else {
+            let offline_arg = "--offline".to_string();
+            if !args.contains(&offline_arg) {
+                args.push(offline_arg);
+            }
         }
     }
     #[cfg(debug_assertions)]
@@ -45,7 +49,7 @@ fn ioc_container<'a, T>(action: Option<T>) -> Result<(), Box<dyn Error>> where T
     dbg!(exit_code);
     Ok(())
 }
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> MxResult<()> {
     let manifest_path = locate_cargo_manifest::locate_manifest();
     ioc_container(if let Ok(manifest_path) = manifest_path.as_ref() {
         #[cfg(all(feature = "cargo-metadata", not(feature = "toml-config")))]

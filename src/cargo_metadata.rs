@@ -1,7 +1,7 @@
-use crate::TAction;
+use crate::{MxResult, TAction};
 use ::cargo_toml::Manifest;
 use ::derive_builder::Builder;
-use ::std::{collections::HashMap, error::Error, io::Write, fs::File, io::Read, path::Path, time::{Duration, SystemTime}};
+use ::std::{collections::HashMap, io::Write, fs::File, io::Read, path::Path, time::{Duration, SystemTime}};
 use ::toml::{map::Map, Value};
 #[derive(Builder)]
 pub struct Action<'a> {
@@ -13,7 +13,7 @@ impl<'a> TAction<'a> for Action<'a> {
     fn get_manifest_path(&self) -> &'a Path {
         self.manifest_path
     }
-    fn get_cached_last_modified_time(&mut self) -> Result<Option<u64>, Box<dyn Error>> {
+    fn get_cached_last_modified_time(&mut self) -> MxResult<Option<u64>> {
         let mut manifest_str = String::new();
         let mut manifest_file = File::open(self.manifest_path)?;
         manifest_file.read_to_string(&mut manifest_str)?;
@@ -32,7 +32,7 @@ impl<'a> TAction<'a> for Action<'a> {
             old_time as u64
         }))
     }
-    fn put_last_modified_time(&mut self, last_modified_time: u64) -> Result<(), Box<dyn Error>> {
+    fn put_last_modified_time(&mut self, last_modified_time: u64) -> MxResult<()> {
         let manifest = self.manifest.as_mut().map(|manifest| {
             macro_rules! modify_metadata {
                 ($origin: expr) => {
@@ -57,7 +57,7 @@ impl<'a> TAction<'a> for Action<'a> {
             }
             if manifest.workspace.is_some() {
                 modify_metadata!(manifest.workspace);
-            } else {
+            } else if manifest.package.is_some() {
                 modify_metadata!(manifest.package);
             }
             manifest
