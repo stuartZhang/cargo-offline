@@ -5,6 +5,7 @@ mod cargo_metadata;
 #[cfg(all(feature = "toml-config", not(feature = "cargo-metadata")))]
 mod toml_file;
 /// 程序内启用了【`Builder`设计模式】与【`Strategy`设计模式】
+use ::proc_lock::proc_lock;
 use ::std::{error::Error, iter::Iterator, env::{VarError, self}, fs::File, path::Path, process::Command, time::SystemTime};
 type MxResult<T> = Result<T, Box<dyn Error>>;
 /// 【`Strategy`设计模式】的【依赖注入】规格定义
@@ -15,6 +16,7 @@ trait TAction<'a> {
     fn put_last_modified_time(&mut self, last_modified_time: u64) -> MxResult<()>;
 }
 /// 【`Strategy`设计模式】的`IoC`容器
+#[proc_lock(name = "cargo-offline.lock")]
 fn ioc_container<'a, T>(action: Option<T>) -> MxResult<()> where T: TAction<'a> {
     let mut args: Vec<String> = match env::args().nth(1) {
         Some(arg1st) if arg1st == "offline" => env::args().skip(2).collect(),
