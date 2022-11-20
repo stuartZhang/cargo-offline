@@ -16,7 +16,8 @@ trait TAction<'a> {
     fn put_last_modified_time(&mut self, last_modified_time: u64) -> MxResult<()>;
 }
 /// 【`Strategy`设计模式】的`IoC`容器
-#[proc_lock(name = "cargo-offline.lock")]
+#[cfg_attr(debug_assertions, proc_lock(name = "cargo-offline.debug.lock"))]
+#[cfg_attr(not(debug_assertions), proc_lock(name = "cargo-offline.lock"))]
 fn ioc_container<'a, T>(action: Option<T>) -> MxResult<()> where T: TAction<'a> {
     let mut args: Vec<String> = match env::args().nth(1) {
         Some(arg1st) if arg1st == "offline" => env::args().skip(2).collect(),
