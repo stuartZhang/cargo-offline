@@ -20,7 +20,7 @@ license = 'Apache-2.0'
 repository = 'https://github.com/stuartZhang/cargo-offline'
 
 [package.metadata]
-last-modified-system-time = 1668939099
+last-modified-system-time = 1684364719
 
 [dependencies]
 derive_builder = '0.11.2'
