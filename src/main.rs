@@ -57,6 +57,8 @@ fn main() -> MxResult<()> {
         let action = cargo_metadata::ActionBuilder::default().manifest_path(manifest_path).build()?;
         #[cfg(all(feature = "toml-config", not(feature = "cargo-metadata")))]
         let action = toml_file::ActionBuilder::default().manifest_path(manifest_path).build()?;
+        #[cfg(all(not(feature = "cargo-metadata"), not(feature = "toml-config")))]
+        compile_error!("缺少 cargo features。请至少选择 cargo-metadata 与 cargo-metadata 中的其一。");
         Some(action)
     } else {
         None
